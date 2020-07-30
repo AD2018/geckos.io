@@ -23,7 +23,7 @@ channel.onConnect(error => {
     console.log('You are connected', channel.id)
   }
 
-  channel.emit('chat message', `Hello everyone, I\'m ${channel.id}`)
+  //channel.emit('chat message', `Hello everyone, I\'m ${channel.id}`)
 
   channel.onDisconnect(() => {
     console.log('You got disconnected')
@@ -34,11 +34,16 @@ channel.onConnect(error => {
       if (text) {
         let content = text.value
         if (content && content.trim().length > 0) {
-          channel.emit('chat message', content.trim())
+          //channel.emit('chat message', content.trim())
           text.value = ''
         }
       }
     })
+
+  channel.raw.emit(new ArrayBuffer(500))
+  channel.emit('a', 120)
+  channel.emit('a', 'string')
+  channel.emit('ㄢ', { hello: 1 })
 
   channel.on('chat message', (data: Data) => {
     appendMessage(data)
@@ -48,10 +53,10 @@ channel.onConnect(error => {
     appendMessage('[RELIABLE] ' + data)
   })
 
-  channel.emit('number', 33)
+  //channel.emit('number', 33)
 
   // send a very important number to the server
-  channel.emit('number', 128, { reliable: true })
+  // channel.emit('number', 128, { reliable: true })
 
   channel.onRaw((rawMessage: RawMessage) => {
     console.log('rawMessage', rawMessage)
@@ -63,6 +68,6 @@ channel.onConnect(error => {
     let bufferView = new DataView(buffer)
     bufferView.setInt8(0, 5)
     bufferView.setInt8(1, 12)
-    channel.raw.emit(buffer)
+    // channel.raw.emit(buffer)
   }, 5000)
 })
